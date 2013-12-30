@@ -8,9 +8,15 @@ class Article < ActiveRecord::Base
   has_many :tags, :through => :taggings
 
   #default_scope :include => [:comments, :tags]
+  #
+  WHITELIST_ATTRIBUTES = [:title, :body, :created_at]
 
   def to_s
     return title
+  end
+
+  [:as_json, :to_xml].each do |name|
+    define_method(name){ |args| super(only: WHITELIST_ATTRIBUTES) }
   end
 
   def tag_list
