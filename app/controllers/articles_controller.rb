@@ -17,7 +17,11 @@ class ArticlesController < ApplicationController
   def create
     @article = Article.new(params[:article])
     flash[:notice] = @article.save ? "Article was created." : "Article failed to save"
-    respond_with @article
+    respond_with @article do |format|
+      format.html { @article.valid? redirect_to(@article) : render(:new) }
+      format.json { render :json => @article }
+      format.xml  { render :xml => @article }
+    end
   end
 
   def edit
