@@ -1,10 +1,13 @@
 class ArticlesController < ApplicationController
+  respond_to :html, :json, :xml
+
   def show
     @article = Article.find(params[:id])
   end
 
   def index
     @articles, @tag = Article.search_by_tag_name(params[:tag])
+    respond_with(@articles)
   end
 
   def new
@@ -13,12 +16,8 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(params[:article])
-    if @article.save
-      flash[:notice] = "Article was created."
-      redirect_to articles_path
-    else
-      render :new
-    end
+    flash[:notice] = @article.save ? "Article was created." : "Article failed to save"
+    respond_with @article
   end
 
   def edit
