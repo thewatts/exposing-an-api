@@ -1,9 +1,9 @@
 class ArticlesController < ApplicationController
-  respond_to :json
+  respond_to :json, :xml
 
   def show
-    @article = Article.find(params[:id])
-    respond_with(@articles)
+    @article = Article.find(params[:id]).decorate
+    respond_with(@article)
   end
 
   def index

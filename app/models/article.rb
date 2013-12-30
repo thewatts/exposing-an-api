@@ -15,10 +15,6 @@ class Article < ActiveRecord::Base
     return title
   end
 
-  [:as_json, :to_xml].each do |name|
-    define_method(name){ |args| super(only: WHITELIST_ATTRIBUTES) }
-  end
-
   def tag_list
      tags.collect{|t| t.name}.join(", ")
   end
