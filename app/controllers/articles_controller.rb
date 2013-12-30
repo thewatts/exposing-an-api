@@ -1,8 +1,9 @@
 class ArticlesController < ApplicationController
-  respond_to :html, :json, :xml
+  respond_to :html, :json
 
   def show
     @article = Article.find(params[:id])
+    respond_with(@article)
   end
 
   def index
@@ -12,30 +13,28 @@ class ArticlesController < ApplicationController
 
   def new
     @article = Article.new
+    respond_with(@article)
   end
 
   def create
     @article = Article.new(params[:article])
     flash[:notice] = @article.save ? "Article was created." : "Article failed to save"
-    respond_with @article do |format|
-      format.html { @article.valid? redirect_to(@article) : render(:new) }
-      format.json { render :json => @article }
-      format.xml  { render :xml => @article }
-    end
+    respond_with @article
   end
 
   def edit
     @article = Article.find params[:id]
+    respond_with @article
   end
 
   def update
     @article = Article.find params[:id]
     if @article.update_attributes(params[:article])
       flash[:notice] = "Article was updated."
-      redirect_to article_path(@article)
     else
-      render :edit
+      flash[:notice] = "Article failed to update."
     end
+    respond_with @article
   end
 
   def destroy
